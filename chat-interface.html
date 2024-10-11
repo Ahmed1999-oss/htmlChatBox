@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Structured Chat Interface</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="main-content">
+            <div class="category-tag">
+                <i class="fa fa-tag icon" aria-hidden="true"></i>
+                <span>Category Tags</span>
+            </div>
+
+
+            <div class="button-container">
+                <div class="tag-list" id="tag-list">
+                    <div class="tag-item" data-tag="Test 1">Test 1</div>
+                    <div class="tag-item" data-tag="Test 2">Test 2</div>
+                    <div class="tag-item" data-tag="Test 3">Test 3</div>
+                    <div class="tag-item" data-tag="Test 4">Test 4</div>
+                    <div class="tag-item" data-tag="Test 5">Test 5</div>
+                </div>
+                <div class="tag-containerddd">
+                    <button class="tagbutton" id="add-tags-button">Add Tags</button>
+                    <div class="tag-container" id="selected-tags">
+                    </div>
+                </div>
+
+            </div>
+
+            <script>
+                const selectedTagsContainer = document.getElementById('selected-tags');
+                const tagItems = document.querySelectorAll('.tag-item');
+                const tagList = document.getElementById('tag-list');
+                const addTagsButton = document.getElementById('add-tags-button');
+
+                // Toggle visibility of the tag list when the button is clicked
+                addTagsButton.addEventListener('click', function () {
+                    tagList.style.display = tagList.style.display === 'none' ? 'block' : 'none';
+                });
+
+                // Event listener for tag selection
+                tagItems.forEach(item => {
+                    item.addEventListener('click', function () {
+                        const tagText = this.getAttribute('data-tag');
+
+                        // Toggle selected class
+                        this.classList.toggle('selected');
+
+                        // Check if the tag is already added
+                        const existingTag = [...selectedTagsContainer.children].some(tag => tag.textContent === tagText);
+                        if (!existingTag) {
+                            // Create a new span element for the tag
+                            const tag = document.createElement('div');
+                            tag.className = 'tag';
+                            tag.textContent = tagText;
+
+                            // Append the tag to the selected tags container
+                            selectedTagsContainer.appendChild(tag);
+                        } else {
+                            // Remove the tag if already selected
+                            const tags = [...selectedTagsContainer.children];
+                            const tagToRemove = tags.find(tag => tag.textContent === tagText);
+                            if (tagToRemove) {
+                                selectedTagsContainer.removeChild(tagToRemove);
+                            }
+                        }
+                    });
+                });
+
+                // Close the tag list if clicked outside
+                document.addEventListener('click', function (event) {
+                    if (!addTagsButton.contains(event.target) && !tagList.contains(event.target)) {
+                        tagList.style.display = 'none';
+                    }
+                });
+            </script>
+            <div class="chat-header">
+                <div class="user-info">
+                    <img src="https://media.istockphoto.com/id/1327592506/vector/default-avatar-photo-placeholder-icon-grey-profile-picture-business-man.jpg?s=612x612&w=0&k=20&c=BpR0FVaEa5F24GIw7K8nMWiiGmbb8qmhfkpXcp1dhQg="
+                        alt="Profile Picture" class="profile-pic">
+                    <div class="user-details">
+                        <h2>ddddd</h2>
+                        <span class="last-seen">Confidence: 99.98%</span>
+                    </div>
+                </div>
+                <i style="padding: 15px;" class="fa fa-columns"></i>
+            </div>
+
+            <div class="chat-area">
+                <iframe src=""></iframe>
+            </div>
+
+            <div class="chat-input">
+                <input type="text" placeholder="Type a message...">
+                <button>Send</button>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="header">
+                <input list="messages" placeholder="Search in messages...">
+                <button><i class="fas fa-download"></i> Export</button>
+
+                <datalist id="messages">
+                    <option value="Conversation 1"></option>
+                    <option value="Conversation 2"></option>
+                    <option value="Conversation 3"></option>
+                    <option value="Anonymous"></option>
+                    <option value="ddddd"></option>
+                </datalist>
+            </div>
+            <div class="search-container">
+                <div class="input-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search in messages" />
+                </div>
+
+                <div class="input-wrapper">
+                    <i class="fas fa-envelope"></i>
+                    <input type="text" placeholder="Search by email address" />
+                </div>
+                <div class="input-filter">
+                    <div class="input-wrapper">
+                        <i class="fas fa-tags"></i>
+                        <input list="chat-tags" placeholder="Filter by chat tags">
+                        <datalist id="chat-tags">
+                            <option value="Important"></option>
+                            <option value="Work"></option>
+                            <option value="Personal"></option>
+                            <option value="Urgent"></option>
+                            <option value="Follow-up"></option>
+                        </datalist>
+                    </div>
+                </div>
+                <div class="input-wrapper">
+                    <i class="fas fa-calendar-alt"></i>
+                    <input id="date-range" placeholder="Select Date Range" readonly>
+                </div>
+            </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+            <script>
+                flatpickr("#date-range", {
+                    mode: "range",
+                    dateFormat: "Y-m-d",
+                    onChange: function (selectedDates, dateStr, instance) {
+                        console.log(selectedDates);
+                    }
+                });
+            </script>
+
+            <div class="conversations-wrapper">
+                <div class="conversations">
+                    <div class="conversation">
+                        <input type="checkbox" class="conversation-checkbox" id="checkbox1">
+                        <label for="checkbox1">
+                            <span class="conversation-name">Anonymous</span>
+                            <span class="conversation-date">10th October 2024 - 11:57 AM</span>
+                        </label>
+                    </div>
+                    <div class="conversation">
+                        <input type="checkbox" class="conversation-checkbox" id="checkbox2">
+                        <label for="checkbox2">
+                            <span class="conversation-name">User 1</span>
+                            <span class="conversation-date">9th October 2024 - 10:30 AM</span>
+                        </label>
+                    </div>
+                    <div class="conversation">
+                        <input type="checkbox" class="conversation-checkbox" id="checkbox2">
+                        <label for="checkbox2">
+                            <span class="conversation-name">User 1</span>
+                            <span class="conversation-date">9th October 2024 - 10:30 AM</span>
+                        </label>
+                    </div>
+                    <div class="conversation">
+                        <input type="checkbox" class="conversation-checkbox" id="checkbox2">
+                        <label for="checkbox2">
+                            <span class="conversation-name">User 1</span>
+                            <span class="conversation-date">9th October 2024 - 10:30 AM</span>
+                        </label>
+                    </div>
+                    <div class="conversation">
+                        <input type="checkbox" class="conversation-checkbox" id="checkbox2">
+                        <label for="checkbox2">
+                            <span class="conversation-name">User 1</span>
+                            <span class="conversation-date">9th October 2024 - 10:30 AM</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>
